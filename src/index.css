@@ -1,0 +1,139 @@
+body {
+  margin: 0;
+  background: #050505;
+  color: white;
+  font-family: "Inter", sans-serif;
+}
+
+/* NAV */
+.nav {
+  position: fixed;
+  width: 100%;
+  padding: 20px 60px;
+  display: flex;
+  justify-content: space-between;
+  backdrop-filter: blur(10px);
+  z-index: 10;
+}
+
+/* HERO */
+.hero {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.hero h1 {
+  font-family: Orbitron;
+}
+
+/* BUTTONS */
+button {
+  margin: 10px;
+  padding: 12px 24px;
+  border: 1px solid #00f0ff;
+  background: transparent;
+  color: #00f0ff;
+  cursor: pointer;
+  transition: 0.3s;
+}
+button:hover {
+  background: #00f0ff;
+  color: black;
+  box-shadow: 0 0 25px #00f0ff;
+}
+
+/* SECTIONS */
+section {
+  padding: 120px 80px;
+}
+
+.title {
+  font-size: 32px;
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+/* GRID */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+/* CARDS */
+.card {
+  height: 260px;
+  background: #111;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.4s;
+}
+.card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 30px #00f0ff;
+}
+
+/* PLAYGROUND */
+.playground {
+  text-align: center;
+}
+.playground .box {
+  height: 200px;
+  width: 200px;
+  margin: 40px auto;
+  background: #111;
+}
+
+/* CONTACT (VERTICAL FIX) */
+.contact {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.contact-container {
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+}
+
+.contact h2 {
+  font-size: 36px;
+  margin-bottom: 40px;
+  font-family: Orbitron;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.contact-form input,
+.contact-form textarea {
+  padding: 14px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(0,240,255,0.2);
+  color: white;
+  outline: none;
+  transition: 0.3s;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  border-color: #00F0FF;
+  box-shadow: 0 0 15px rgba(0,240,255,0.3);
+}
+
+/* RESPONSIVE */
+@media(max-width:1200px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  .hero h1 {
+  }
+}
