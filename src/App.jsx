@@ -3635,20 +3635,11 @@ export default function App() {
           }
 
           .light-showcase-grid {
-            display: flex;
-            gap: 14px;
-            overflow-x: auto;
-            overflow-y: hidden;
-            padding: 4px var(--page-gutter) 16px;
-            scroll-padding-inline: var(--page-gutter);
-            scroll-snap-type: x mandatory;
-            overscroll-behavior-x: contain;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-          }
-
-          .light-showcase-grid::-webkit-scrollbar {
-            display: none;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 6px;
+            overflow: visible;
+            padding: 4px var(--page-gutter) 12px;
           }
 
           .light-showcase-grid:focus-visible {
@@ -3662,9 +3653,9 @@ export default function App() {
           }
 
           .light-showcase-card {
-            flex: 0 0 min(78vw, 340px);
+            min-width: 0;
+            flex: initial;
             padding: 3px;
-            scroll-snap-align: start;
           }
 
           .light-showcase-image-wrap {
@@ -3675,9 +3666,9 @@ export default function App() {
             right: 4px;
             bottom: 4px;
             left: 4px;
-            padding: 17px 5px 6px;
-            font-size: 0.42rem;
-            letter-spacing: 0.08em;
+            padding: 14px 3px 5px;
+            font-size: clamp(0.44rem, 1.8vw, 0.55rem);
+            letter-spacing: 0.04em;
           }
 
           .light-showcase-section::after {
@@ -3688,9 +3679,11 @@ export default function App() {
           #natural-cultural-illuminations .light-showcase-heading::after { right: 1%; }
 
           .light-showcase-card-link {
-            min-height: 44px;
-            padding: 12px 10px;
-            font-size: 0.42rem;
+            width: 100%;
+            min-height: 40px;
+            padding: 6px 3px;
+            font-size: clamp(0.46rem, 1.8vw, 0.55rem);
+            letter-spacing: 0.04em;
           }
         }
 
@@ -4375,61 +4368,71 @@ export default function App() {
           }
 
           .service-row {
-            grid-template-columns: minmax(0, 1fr);
-            gap: 0;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            align-items: stretch;
+            gap: 10px;
           }
 
           .service-row:nth-child(4) {
-            translate: 0 -16px;
-            margin-bottom: -16px;
+            translate: none;
+            margin-bottom: 0;
           }
 
           .service-card,
           .service-card.small {
-            width: calc(100% - 12px);
-            aspect-ratio: 6 / 3;
+            width: 100%;
+            aspect-ratio: 0.92;
             min-height: 0;
           }
 
-          .service-row:nth-child(even) .service-card {
-            grid-column: 1;
-            grid-row: auto;
-          }
-
           .service-row:nth-child(odd) .service-card {
-            margin-left: 12px;
-            margin-right: 0;
+            grid-column: 1;
+            grid-row: 1;
+          }
+
+          .service-row:nth-child(odd) .service-detail {
+            grid-column: 2;
+            grid-row: 1;
           }
 
           .service-row:nth-child(even) .service-card {
-            margin-right: 12px;
-            margin-left: 0;
+            grid-column: 2;
+            grid-row: 1;
+          }
+
+          .service-row:nth-child(even) .service-detail {
+            grid-column: 1;
+            grid-row: 1;
           }
 
           .service-detail,
           .service-row:nth-child(even) .service-detail {
-            grid-column: 1;
-            grid-row: auto;
             max-width: none;
-            padding: 18px 12px 26px;
+            padding: 12px 4px;
+            align-self: center;
           }
 
           .service-detail-index {
-            margin-bottom: 10px;
+            margin-bottom: 8px;
+            font-size: 0.5rem;
+            letter-spacing: 0.14em;
           }
 
           .service-detail h3 {
-            max-width: 18ch;
-            margin-bottom: 10px;
-            font-size: clamp(1.7rem, 7vw, 2.4rem);
+            max-width: none;
+            margin-bottom: 8px;
+            font-size: clamp(1.15rem, 4.6vw, 1.8rem);
+            line-height: 1.02;
           }
 
           .service-detail p {
-            font-size: 0.85rem;
+            font-size: clamp(0.68rem, 2.7vw, 0.82rem);
+            line-height: 1.55;
           }
 
           .service-detail-line {
-            margin-top: 36px;
+            width: min(100%, 110px);
+            margin-top: 18px;
           }
 
           .contact-section,
