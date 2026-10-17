@@ -37,3 +37,78 @@ h2 {
   background: radial-gradient(circle, transparent 60%, black 100%);
   pointer-events: none;
 }
+
+/* Showreel video styling */
+.showreel-section {
+  padding: 80px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.showreel-video-wrap {
+  width: min(1100px, 92%);
+  max-height: 62vh;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #000;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+  margin-top: 20px;
+}
+
+.showreel-video {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+/* Centered logo reveal after showreel */
+.logo-reveal {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 48px 0 120px;
+  opacity: 0;
+  transform: translateY(40px) scale(0.95);
+}
+
+.logo-reveal img {
+  width: 220px;
+  height: auto;
+  filter: drop-shadow(0 6px 18px rgba(0,0,0,0.6));
+}
+
+@media (max-width: 680px) {
+  .logo-reveal img { width: 150px; }
+}
+
+/* Fullscreen landing variant: hide UI chrome and make video cover viewport */
+.showreel-section.landing {
+  padding: 0;
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+}
+
+.showreel-section.landing .showreel-video-wrap {
+  width: 100%;
+  height: 100vh;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.showreel-section.landing .showreel-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.showreel-section.landing .showreel-text,
+.showreel-section.landing .showreel-controls,
+.showreel-section.landing .showreel-overlay {
+  display: none !important;
+}
