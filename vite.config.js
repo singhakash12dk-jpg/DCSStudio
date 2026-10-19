@@ -2,10 +2,12 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
+const repositoryName = process.env.GITHUB_REPOSITORY?.split('/')[1]
+
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  base: process.env.NETLIFY === 'true' ? '/' : '/dreamcatchers/',
+  base: process.env.NETLIFY === 'true' ? '/' : `/${repositoryName || 'dreamcatchers'}/`,
   build: {
     outDir: 'dist',
     sourcemap: false,
