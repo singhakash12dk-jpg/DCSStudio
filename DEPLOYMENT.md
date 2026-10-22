@@ -49,7 +49,7 @@ git push -u origin main
 ### Step 4: Access Your Website
 
 After GitHub Actions completes (✓ green checkmark):
-- Your site will be live at: `https://YOUR_USERNAME.github.io/dreamcatchers_project/`
+- Your site will be live at: `https://www.dreamcatcherstudios.in/`
 - Visit **Settings → Pages** to see the live URL
 
 ---
@@ -74,19 +74,21 @@ git push
 
 ## Important Notes
 
-### Base Path Configuration
-The project is configured with `base: '/dreamcatchers_project/'` in `vite.config.js`. This assumes your repository is named `dreamcatchers_project`.
+### GoDaddy custom domain
 
-**If you use a different repository name**, update `vite.config.js`:
-```javascript
-base: '/YOUR_REPO_NAME/',
-```
+The site uses `www.dreamcatcherstudios.in` as its GitHub Pages custom domain. The Pages build uses root-relative asset URLs for this domain and includes `public/CNAME` in the deployment artifact.
 
-### Custom Domain (Optional)
-If you have a custom domain, you can:
-1. Go to **Settings → Pages**
-2. Add your custom domain under "Custom domain"
-3. Follow GitHub's DNS configuration instructions
+In GoDaddy DNS, configure:
+
+| Type | Name | Value |
+|---|---|---|
+| A | `@` | `185.199.108.153` |
+| A | `@` | `185.199.109.153` |
+| A | `@` | `185.199.110.153` |
+| A | `@` | `185.199.111.153` |
+| CNAME | `www` | `singhakash12dk-jpg.github.io` |
+
+Remove conflicting records for `@` or `www`. In the GitHub repository that owns the Pages deployment, open **Settings → Pages**, set the custom domain to `www.dreamcatcherstudios.in`, wait for the HTTPS certificate to become available, then enable **Enforce HTTPS**. The apex domain (`dreamcatcherstudios.in`) should redirect to `www`.
 
 ### Performance Notes
 - Build size: ~1.2MB (gzipped: 324KB) - normal for 3D React projects
@@ -102,10 +104,10 @@ If you have a custom domain, you can:
 - Check the Actions tab for build errors
 - Verify Settings → Pages shows "Deployment successful"
 
-**Wrong base path?**
-- Update `vite.config.js` → `base` property
-- Run `npm run build` locally
-- Push changes
+**Broken assets on the custom domain?**
+- Confirm the Pages build sets `GITHUB_PAGES_CUSTOM_DOMAIN=true` so Vite emits root-relative asset URLs.
+- Confirm `public/CNAME` contains `www.dreamcatcherstudios.in`.
+- Run a new GitHub Pages deployment after pushing the changes.
 
 **Custom domain not working?**
 - Check DNS records propagated (can take up to 24 hours)

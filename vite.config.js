@@ -3,11 +3,12 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
 const repositoryName = process.env.GITHUB_REPOSITORY?.split('/')[1]
+const customDomainBuild = process.env.GITHUB_PAGES_CUSTOM_DOMAIN === 'true'
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  base: process.env.NETLIFY === 'true' ? '/' : `/${repositoryName || 'dreamcatchers'}/`,
+  base: process.env.NETLIFY === 'true' || customDomainBuild ? '/' : `/${repositoryName || 'dreamcatchers'}/`,
   build: {
     outDir: 'dist',
     sourcemap: false,
