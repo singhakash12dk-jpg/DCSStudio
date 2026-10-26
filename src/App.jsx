@@ -11,6 +11,7 @@ import "./App.css";
 gsap.registerPlugin(ScrollTrigger);
 
 const IMG_BASE = `${import.meta.env.BASE_URL}images/`;
+const ENQUIRY_RECIPIENT_EMAIL = "dreamcatcherstudios19@gmail.com";
 
 /* Smart Image helper: automatically tries .png, .jpg, .jpeg so no image ever breaks */
 function SmartImg({ name, alt = "", className = "", style = {}, onLoad, draggable = false, loading }) {
@@ -1160,6 +1161,7 @@ function Contact() {
           <span className="contact-heading-highlight">Something Unreal</span>
         </h2>
         <form className="contact-form" ref={formRef} onSubmit={handleSubmit}>
+          <input type="hidden" name="to_email" value={ENQUIRY_RECIPIENT_EMAIL} />
           <div className="form-row">
             <div className="form-group">
               <label>Your Name</label>

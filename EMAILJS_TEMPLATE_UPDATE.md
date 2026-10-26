@@ -12,13 +12,21 @@ Follow these steps to show the sender's email and name in incoming emails:
 - Click on **Email Templates** → find `template_slxtvgm`
 - Click **Edit**
 
-### Step 3: Update Subject Line
+### Step 3: Set the recipient
+Set the template's **To Email** field to:
+```
+{{to_email}}
+```
+
+The website supplies `dreamcatcherstudios19@gmail.com` as `to_email` for each enquiry.
+
+### Step 4: Update Subject Line
 Replace the current subject with:
 ```
 Contact from {{from_name}} <{{from_email}}>
 ```
 
-### Step 4: Update Email Body
+### Step 5: Update Email Body
 Replace the current body HTML/text with this:
 
 **HTML Version (Recommended):**
@@ -55,14 +63,14 @@ Message:
 Email sent via DreamCatcher Studio website
 ```
 
-### Step 5: Set Reply-To Header
+### Step 6: Set Reply-To Header
 - Scroll down to **Headers** section (if available)
 - Add a new header:
   - **Key:** `Reply-To`
   - **Value:** `{{reply_to}}`
 - OR in **Advanced Settings**, look for a **Reply-To** field and set it to `{{reply_to}}`
 
-### Step 6: Save & Test
+### Step 7: Save & Test
 - Click **Save**
 - Go back to your website and submit a test contact form
 - Check your email — you should now see:
@@ -77,6 +85,7 @@ Email sent via DreamCatcher Studio website
 
 ## Variables Available in Template
 The contact form sends these variables:
+- `{{to_email}}` — Enquiry destination (`dreamcatcherstudios19@gmail.com`)
 - `{{from_name}}` — Visitor's name
 - `{{from_email}}` — Visitor's email
 - `{{message}}` — Their message
