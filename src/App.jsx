@@ -13,7 +13,7 @@ gsap.registerPlugin(ScrollTrigger);
 const IMG_BASE = `${import.meta.env.BASE_URL}images/`;
 
 /* Smart Image helper: automatically tries .png, .jpg, .jpeg so no image ever breaks */
-function SmartImg({ name, alt = "", className = "", style = {}, onLoad, draggable = false }) {
+function SmartImg({ name, alt = "", className = "", style = {}, onLoad, draggable = false, loading }) {
   const cleanName = name.replace(/\.(png|jpg|jpeg|webp)$/i, "");
   const extensions = [".png", ".jpg", ".jpeg", ".jpg.jpeg", ".webp"];
   const [extIndex, setExtIndex] = useState(0);
@@ -27,6 +27,7 @@ function SmartImg({ name, alt = "", className = "", style = {}, onLoad, draggabl
       className={className}
       style={style}
       draggable={draggable}
+      loading={loading}
       onLoad={onLoad}
       onError={() => {
         if (extIndex < extensions.length - 1) {
@@ -106,7 +107,7 @@ function SiteBackground() {
 }
 
 /* NAVBAR */
-function Navbar() {
+function Navbar({ onOpenWork }) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -130,6 +131,16 @@ function Navbar() {
           <span /><span /><span />
         </button>
         <div id="primary-navigation" className={`nav-links ${menuOpen ? "nav-open" : ""}`}>
+          <a
+            href="#work-gallery"
+            onClick={(event) => {
+              event.preventDefault();
+              setMenuOpen(false);
+              onOpenWork();
+            }}
+          >
+            Our Work
+          </a>
           <a href="#process" onClick={() => setMenuOpen(false)}>Process</a>
           <a href="#services" onClick={() => setMenuOpen(false)}>Services</a>
           <a href="#about" onClick={() => setMenuOpen(false)}>About</a>
@@ -237,18 +248,14 @@ function About() {
             Dreamcatcher Studios is where imagination meets execution.
           </p>
         </div>
-        <div className="about-team-photo" aria-label="Dreamcatcher Studios team">
-          <div className="about-team-photo-header">
-            <span>OUR TEAM</span>
-            <span>DREAMCATCHER STUDIOS</span>
+        <div className="about-work-showcase" aria-label="Selected Dreamcatcher Studios projects">
+          <div className="about-work-feature">
+            <img
+              src={`${IMG_BASE}Work/PH3_5237.jpg.jpeg`}
+              alt="Colorful projection mapping across a building facade at a live event"
+              loading="lazy"
+            />
           </div>
-          <div className="about-team-collage">
-            <div className="about-team-placeholder">
-              <span>TEAM PHOTO</span>
-              <small>IMAGE GOES HERE</small>
-            </div>
-          </div>
-          <p className="about-team-caption">A space reserved for the people behind the work.</p>
         </div>
       </div>
     </div>
@@ -519,23 +526,23 @@ function Services() {
   );
 }
 
-function LightArtShowcase() {
+function LightArtShowcase({ onOpenWork }) {
   const illuminationStudies = [
-    { name: "2", label: "Study I | The Sacred Om" },
-    { name: "3", label: "Study II | Nation's Pride" },
-    { name: "4", label: "Study III | Revered Deities" },
+    { name: "2", label: "Divine Visions at Dusk" },
+    { name: "3", label: "Nation's Pride" },
+    { name: "4", label: "Revered Deities" },
   ];
   const deityProjectionImages = [
-    { name: "5", label: "Image A" },
-    { name: "6", label: "Image B" },
-    { name: "7", label: "Image C" },
+    { name: "5", label: "Tricolor Tribute" },
+    { name: "6", label: "Shiva in Blue Light" },
+    { name: "7", label: "Sacred Om in Light" },
   ];
 
-  const renderImageRow = (images, showDetails = false) => (
+  const renderImageRow = (images, withControls = false) => (
     <div
-      className={`light-showcase-grid${showDetails ? " light-showcase-grid-with-controls" : ""}`}
+      className={`light-showcase-grid${withControls ? " light-showcase-grid-with-controls" : ""}`}
       role="region"
-      aria-label={showDetails ? "Deity projection images" : "Illumination studies"}
+      aria-label={withControls ? "Deity projection images" : "Illumination studies"}
       tabIndex={0}
     >
       {images.map(({ name, label }) => (
@@ -550,11 +557,6 @@ function LightArtShowcase() {
           <figcaption>
             <span>{label}</span>
           </figcaption>
-          {showDetails && (
-            <a className="light-showcase-card-link" href="#process">
-              View details
-            </a>
-          )}
         </figure>
       ))}
     </div>
@@ -598,6 +600,14 @@ function LightArtShowcase() {
           </div>
           {renderImageRow(deityProjectionImages, true)}
         </div>
+
+        <button
+          className="light-showcase-link light-showcase-link-primary light-showcase-gallery-cta"
+          type="button"
+          onClick={onOpenWork}
+        >
+          Explore all work <span aria-hidden="true">↗</span>
+        </button>
       </div>
     </section>
   );
@@ -826,27 +836,36 @@ function ProcessSection() {
 
 /* FULL WORK GALLERY */
 function WorkGallery({ onBack }) {
-  const [image, setImage] = useState(null);
   const work = [
-    ["facade", "Facade Mapping", "Projection Mapping"],
-    ["Projection mapping", "Projection Mapping", "Architecture / Light"],
-    ["product", "Brand Experiences", "Brand Activation"],
-    ["interactive", "Immersive Installations", "Spatial Experiences"],
-    ["Robot", "Content Production", "Motion / Real-time"],
-    ["PH3_4191", "Live Visuals", "Event Experience"],
-    ["PH3_5237", "Spatial Storytelling", "Installation"],
-    ["Work", "Visual Architecture", "Digital Art"],
-    ["Work01", "Light and Form", "Experience Design"],
-    ["Work02", "Interactive Worlds", "Immersive Media"],
-    ["Work03", "Future Spaces", "Content Design"],
-    ["Work04", "Brand in Motion", "Visual Identity"],
-    ["Work05", "Night Projection", "Projection Mapping"],
-    ["Work06", "Atmospheric Light", "Live Production"],
-    ["Work08", "Digital Environment", "Immersive Art"],
-    ["WhatsApp Image 2026-04-08 at 1.50.34 PM", "The Experience", "Brand World"],
-    ["WhatsApp Image 2026-04-08 at 1.50.35 PM", "Built for Wonder", "Spatial Design"],
-    ["WhatsApp Image 2026-04-08 at 1.50.36 PM", "Signal / Space", "Interactive Media"],
-    ["WhatsApp Image 2026-04-08 at 1.50.37 PM", "In the Moment", "Live Experience"],
+    ["2.png", "Divine Visions at Dusk", "Cultural Projection"],
+    ["3.png", "Nation's Pride", "Projection Mapping"],
+    ["4.png", "Revered Deities", "Cultural Projection"],
+    ["5.png", "Tricolor Tribute", "Projection Mapping"],
+    ["6.png", "Shiva in Blue Light", "Cultural Projection"],
+    ["7.png", "Sacred Om in Light", "Projection Mapping"],
+    ["PH3_4191.jpg.jpeg", "Live Visuals", "Event Experience"],
+    ["PH3_5237.jpg.jpeg", "Spatial Storytelling", "Installation"],
+    ["Projection mapping.png", "Projection Mapping", "Architecture / Light"],
+    ["Robot.png", "Real-time Worlds", "Unreal Engine"],
+    ["WhatsApp Image 2026-04-08 at 1.50.34 PM.jpeg", "The Experience", "Brand World"],
+    ["WhatsApp Image 2026-04-08 at 1.50.35 PM.jpeg", "Built for Wonder", "Spatial Design"],
+    ["WhatsApp Image 2026-04-08 at 1.50.35 PM (1).jpeg", "Light Across the City", "Projection Mapping"],
+    ["WhatsApp Image 2026-04-08 at 1.50.35 PM (2).jpeg", "A New Perspective", "Spatial Experience"],
+    ["WhatsApp Image 2026-04-08 at 1.50.35 PM (3).jpeg", "The Living Canvas", "Immersive Media"],
+    ["WhatsApp Image 2026-04-08 at 1.50.36 PM.jpeg", "Signal / Space", "Interactive Media"],
+    ["WhatsApp Image 2026-04-08 at 1.50.36 PM (1).jpeg", "Light in the Round", "Spatial Experience"],
+    ["WhatsApp Image 2026-04-08 at 1.50.36 PM (2).jpeg", "Colour in Motion", "Live Production"],
+    ["WhatsApp Image 2026-04-08 at 1.50.37 PM.jpeg", "In the Moment", "Live Experience"],
+    ["Work.png", "Visual Architecture", "Digital Art"],
+    ["Work01.png", "Light and Form", "Experience Design"],
+    ["Work02.png", "Interactive Worlds", "Immersive Media"],
+    ["Work03.png", "Future Spaces", "Content Design"],
+    ["Work04.png", "Brand in Motion", "Visual Identity"],
+    ["Work05.png", "Night Projection", "Projection Mapping"],
+    ["Work06.png", "Atmospheric Light", "Live Production"],
+    ["Work08.png", "Digital Environment", "Immersive Art"],
+    ["facade.jpeg", "Facade Mapping", "Projection Mapping"],
+    ["product.png", "Brand Experiences", "Brand Activation"],
   ];
 
   return (
@@ -866,14 +885,12 @@ function WorkGallery({ onBack }) {
         </p>
       </header>
       <div className="work-gallery-grid">
-        {work.map(([name, title, category], index) => (
-          <button
+        {work.map(([filename, title, category], index) => (
+          <article
             className={`work-gallery-item ${index % 5 === 0 ? "work-gallery-item-wide" : ""}`}
-            key={name}
-            type="button"
-            onClick={() => setImage(name)}
+            key={filename}
           >
-            <SmartImg alt={title} name={name} />
+            <img src={`${IMG_BASE}Work/${encodeURI(filename)}`} alt={title} loading="lazy" />
             <span className="work-gallery-item-shade" />
             <span className="work-gallery-item-info">
               <small>
@@ -881,14 +898,9 @@ function WorkGallery({ onBack }) {
               </small>
               <strong>{title}</strong>
             </span>
-          </button>
+          </article>
         ))}
       </div>
-      {image && (
-        <div className="fullscreen" onClick={() => setImage(null)}>
-          <SmartImg alt="Full View" name={image} />
-        </div>
-      )}
     </main>
   );
 }
@@ -901,7 +913,7 @@ function Team() {
   const viewportRef = useRef(null);
   const trackRef = useRef(null);
   const progressRef = useRef(null);
-  const [selectedMember, setSelectedMember] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const team = useMemo(
     () => [
@@ -909,105 +921,41 @@ function Team() {
         name: "Aman Jajoria",
         role: "Founder & Creative Director",
         img: "Aman Jajoria",
-        responsibilities: [
-          "Overall creative vision and direction for all projects",
-          "Client relationship management and project strategy",
-          "Leading large-scale projection mapping productions",
-          "Overseeing content creation and visual storytelling",
-          "Business development and brand partnerships",
-          "Mentoring the creative team and fostering innovation",
-        ],
       },
       {
         name: "Shalini Singh",
         role: "Business Development Manager",
         img: "Shalini Singh",
-        responsibilities: [
-          "Identifying and pursuing new business opportunities and market trends",
-          "Building and maintaining strong relationships with clients and partners",
-          "Developing strategic partnerships and collaborations",
-          "Preparing proposals and pitching services to prospective clients",
-          "Managing client accounts and ensuring satisfaction",
-          "Tracking sales metrics and reporting on business growth",
-        ],
       },
       {
         name: "Nishant Kumar",
         role: "Project Manager",
         img: "Nishant Kumar",
-        responsibilities: [
-          "Planning, scheduling, and organizing all project phases",
-          "Managing project timelines, budgets, and resources",
-          "Coordinating between creative and technical teams",
-          "Risk management and problem-solving during production",
-          "Regular client communication and status updates",
-          "Ensuring projects are delivered on time and within scope",
-        ],
       },
       {
         name: "Sonali Srivastava",
         role: "Senior Compositing/Motion Graphics Artist",
         img: "Sonali Srivastava",
-        responsibilities: [
-          "Creating complex visual effects and motion graphics sequences",
-          "Compositing multiple layers and elements for final output",
-          "Mentoring junior artists and overseeing quality standards",
-          "Developing innovative visual solutions for client briefs",
-          "Color grading and post-production refinement",
-          "Leading the motion graphics team on high-profile projects",
-        ],
       },
       {
         name: "Dinkar Rav",
         role: "Motion Graphic Artist",
         img: "Dinkar Rav",
-        responsibilities: [
-          "Designing and animating motion graphics for various media",
-          "Creating dynamic visual content for projection mapping",
-          "Collaborating with the creative team on visual concepts",
-          "Producing promotional videos and brand animations",
-          "Assisting with real-time rendering and live performance content",
-          "Contributing to content libraries and asset management",
-        ],
       },
       {
         name: "Sonia Saini",
         role: "Creative Producer",
         img: "Sonia Saini",
-        responsibilities: [
-          "Overseeing creative production processes from start to finish",
-          "Coordinating between departments and managing creative workflows",
-          "Ensuring brand consistency and quality across all deliverables",
-          "Managing content calendars and production schedules",
-          "Problem-solving and optimizing production efficiency",
-          "Collaborating with clients to refine creative direction",
-        ],
       },
       {
         name: "Aman Kumar",
         role: "Unreal Engine Artist",
         img: "Aman Kumar",
-        responsibilities: [
-          "Developing real-time environments and interactive experiences in Unreal Engine",
-          "Creating high-performance 3D assets optimized for live rendering",
-          "Implementing visual effects and lighting for immersive experiences",
-          "Troubleshooting technical issues and optimizing performance",
-          "Collaborating with designers to bring concepts to life",
-          "Developing custom tools and workflows for production efficiency",
-        ],
       },
       {
         name: "Akash Singh",
         role: "3D Rigging Artist",
         img: "Akash Singh",
-        responsibilities: [
-          "Creating and implementing complex character and prop rigging systems",
-          "Developing skeletal structures and control rigs for animation",
-          "Troubleshooting rigging issues and optimizing rig performance",
-          "Collaborating with modelers and animators for seamless workflows",
-          "Setting up deformers and constraint systems for realistic movement",
-          "Creating rigging documentation and maintaining best practices",
-        ],
       },
     ],
     []
@@ -1093,32 +1041,21 @@ function Team() {
               <article
                 key={i}
                 className="team-slide-card"
-                onClick={() => setSelectedMember(member)}
               >
-                <div className="team-slide-img-wrap">
+                <button
+                  type="button"
+                  className="team-slide-img-wrap"
+                  onClick={() => setSelectedImage(member)}
+                  aria-label={`View ${member.name}'s photo`}
+                >
                   <SmartImg alt={member.name} draggable={false} name={member.img} />
                   <div className="team-slide-overlay" />
                   <span className="team-slide-index">0{i + 1}</span>
-                </div>
+                </button>
 
                 <div className="team-slide-body">
                   <span className="team-slide-role">{member.role}</span>
                   <h3 className="team-slide-name">{member.name}</h3>
-                  <ul className="team-slide-highlights">
-                    {member.responsibilities.slice(0, 3).map((resp, idx) => (
-                      <li key={idx}>{resp}</li>
-                    ))}
-                  </ul>
-                  <button
-                    type="button"
-                    className="team-slide-more"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setSelectedMember(member);
-                    }}
-                  >
-                    VIEW PROFILE <span aria-hidden="true">↗</span>
-                  </button>
                 </div>
               </article>
             ))}
@@ -1126,26 +1063,9 @@ function Team() {
         </div>
       </div>
 
-      {selectedMember && (
-        <div className="team-modal-backdrop" onClick={() => setSelectedMember(null)}>
-          <div className="team-modal" onClick={(e) => e.stopPropagation()}>
-            <button className="team-modal-close" onClick={() => setSelectedMember(null)} aria-label="Close">
-              &times;
-            </button>
-            <div className="team-modal-header">
-              <SmartImg alt={selectedMember.name} className="team-modal-img" name={selectedMember.img} />
-              <div>
-                <h3 className="team-modal-name">{selectedMember.name}</h3>
-                <span className="team-modal-role">{selectedMember.role}</span>
-              </div>
-            </div>
-            <h4 className="team-modal-subtitle">Key Responsibilities</h4>
-            <ul className="team-modal-list">
-              {selectedMember.responsibilities.map((item, idx) => (
-                <li key={idx}>{item}</li>
-              ))}
-            </ul>
-          </div>
+      {selectedImage && (
+        <div className="fullscreen" onClick={() => setSelectedImage(null)}>
+          <SmartImg alt={selectedImage.name} name={selectedImage.img} />
         </div>
       )}
     </section>
@@ -1386,7 +1306,7 @@ function Contact() {
 }
 
 /* FOOTER */
-function Footer() {
+function Footer({ onOpenWork }) {
   return (
     <footer className="footer">
       <div className="footer-inner">
@@ -1403,7 +1323,15 @@ function Footer() {
           <div className="footer-col">
             <h4>Quick Links</h4>
             <a href="#hero">Home</a>
-            <a href="#process">Work</a>
+            <a
+              href="#work-gallery"
+              onClick={(event) => {
+                event.preventDefault();
+                onOpenWork();
+              }}
+            >
+              Our Work
+            </a>
             <a href="#process">Process</a>
             <a href="#about">About</a>
             <a href="#team">Team</a>
@@ -1919,6 +1847,12 @@ export default function App() {
     requestAnimationFrame(resetScrollTop);
   };
 
+  const handleOpenWork = () => {
+    ScrollTrigger.getAll().forEach((trigger) => trigger.kill(true));
+    setCurrentPage("work");
+    requestAnimationFrame(resetScrollTop);
+  };
+
   return (
     <>
       {loading && <LoadingScreen onFinish={() => setLoading(false)} />}
@@ -1928,16 +1862,16 @@ export default function App() {
           <SiteBackground />
           {currentPage === "home" ? (
             <>
-              <Navbar />
+              <Navbar onOpenWork={handleOpenWork} />
               <Hero/>
               <About/>
               <ImageMarquee/>
               <Services/>
-              <LightArtShowcase/>
+              <LightArtShowcase onOpenWork={handleOpenWork} />
               <ProcessSection/>
               <Team/>
               <Contact/>
-              <Footer/>
+              <Footer onOpenWork={handleOpenWork} />
             </>
           ) : currentPage === "work" ? (
             <WorkGallery onBack={handleBackToHome} />
@@ -2186,72 +2120,30 @@ export default function App() {
           margin-bottom: 20px;
         }
 
-        .about-team-photo {
+        .about-work-showcase {
           width: 100%;
           justify-self: end;
           align-self: start;
           padding-top: 8px;
         }
 
-        .about-team-photo-header {
-          display: flex;
-          justify-content: space-between;
-          padding-bottom: 14px;
-          border-bottom: 1px solid rgba(255,255,255,0.18);
-          color: rgba(255,255,255,0.46);
-          font-size: 10px;
-          letter-spacing: 1.8px;
-        }
-
-        .about-team-collage {
-          position: relative;
+        .about-work-feature {
           width: 100%;
           aspect-ratio: 16 / 10;
-          margin-top: 18px;
           overflow: hidden;
-          background: linear-gradient(135deg, rgba(255,140,0,0.12), transparent 45%), #181818;
+          background: #141312;
           border: 1px solid rgba(255,255,255,0.18);
         }
 
-        .about-team-collage::before,
-        .about-team-collage::after {
-          content: '';
-          position: absolute;
-          background: rgba(255,140,0,0.48);
+        .about-work-feature img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: filter 0.35s ease;
         }
 
-        .about-team-collage::before { left: 50%; top: 15%; width: 1px; height: 70%; }
-        .about-team-collage::after { top: 50%; left: 15%; width: 70%; height: 1px; }
-
-        .about-team-placeholder {
-          position: absolute;
-          inset: 1px;
-          z-index: 1;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          gap: 12px;
-          text-align: center;
-        }
-
-        .about-team-placeholder span {
-          color: #ff8c00;
-          font-size: 18px;
-          font-weight: 600;
-          letter-spacing: 4px;
-        }
-
-        .about-team-placeholder small {
-          color: rgba(255,255,255,0.38);
-          font-size: 10px;
-          letter-spacing: 2px;
-        }
-
-        .about-team-caption {
-          margin-top: 16px;
-          color: rgba(255,255,255,0.52);
-          font-size: 14px;
+        .about-work-feature img:hover {
+          filter: brightness(1.14);
         }
 
         /* IMAGE MARQUEE */
@@ -3469,6 +3361,13 @@ export default function App() {
           color: #15100b;
         }
 
+        .light-showcase-gallery-cta {
+          display: flex;
+          width: fit-content;
+          margin: 40px auto 0;
+          cursor: pointer;
+        }
+
         .light-showcase-collection {
           position: relative;
           scroll-margin-top: 100px;
@@ -3583,28 +3482,6 @@ export default function App() {
           text-transform: uppercase;
         }
 
-        .light-showcase-card-link {
-          display: block;
-          width: fit-content;
-          margin: 12px auto 0;
-          padding: 7px 14px;
-          border: 1px solid rgba(240, 168, 74, 0.48);
-          border-radius: 999px;
-          color: rgba(244, 223, 198, 0.86);
-          font-size: 0.5rem;
-          letter-spacing: 0.12em;
-          text-align: center;
-          text-decoration: none;
-          text-transform: uppercase;
-          transition: color 0.25s ease, border-color 0.25s ease, background 0.25s ease;
-        }
-
-        .light-showcase-card-link:hover {
-          border-color: #f0a84a;
-          background: #f0a84a;
-          color: #15100b;
-        }
-
         @media (max-width: 700px) {
           .light-showcase-inner {
             padding: 36px 0 44px;
@@ -3678,13 +3555,6 @@ export default function App() {
           #natural-cultural-illuminations .light-showcase-heading::before { left: 1%; }
           #natural-cultural-illuminations .light-showcase-heading::after { right: 1%; }
 
-          .light-showcase-card-link {
-            width: 100%;
-            min-height: 40px;
-            padding: 6px 3px;
-            font-size: clamp(0.46rem, 1.8vw, 0.55rem);
-            letter-spacing: 0.04em;
-          }
         }
 
         /* =====================================================
@@ -3747,7 +3617,6 @@ export default function App() {
           background: #151515;
           display: flex;
           flex-direction: column;
-          cursor: pointer;
           user-select: none;
           transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), border-color 0.4s ease, box-shadow 0.4s ease;
         }
@@ -3759,6 +3628,13 @@ export default function App() {
         }
 
         .team-slide-img-wrap {
+          display: block;
+          width: 100%;
+          padding: 0;
+          border: 0;
+          color: inherit;
+          text-align: inherit;
+          cursor: zoom-in;
           position: relative;
           height: 310px;
           overflow: hidden;
@@ -3817,168 +3693,7 @@ export default function App() {
           font-size: 21px;
           font-weight: 600;
           color: #fff;
-          margin-bottom: 14px;
-        }
-
-        .team-slide-highlights {
-          list-style: none;
-          padding: 0;
-          margin: 0 0 18px;
-          display: flex;
-          flex-direction: column;
-          gap: 8px;
-          flex-grow: 1;
-        }
-
-        .team-slide-highlights li {
-          font-size: 13px;
-          font-weight: 300;
-          color: rgba(255, 255, 255, 0.6);
-          line-height: 1.5;
-          padding-left: 14px;
-          position: relative;
-        }
-
-        .team-slide-highlights li::before {
-          content: '';
-          position: absolute;
-          left: 0;
-          top: 8px;
-          width: 5px;
-          height: 5px;
-          border-radius: 50%;
-          background: #FF8C00;
-        }
-
-        .team-slide-more {
-          align-self: flex-start;
-          background: transparent;
-          border: none;
-          border-bottom: 1px solid rgba(240, 168, 74, 0.6);
-          padding-bottom: 5px;
-          color: #f5f0e8;
-          font-size: 10px;
-          letter-spacing: 0.2em;
-          text-transform: uppercase;
-          cursor: pointer;
-          transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, color 0.3s ease, padding-left 0.3s ease;
-        }
-
-        .team-slide-card:hover .team-slide-more {
-          color: #f0a84a;
-          padding-left: 6px;
-        }
-
-        .team-slide-more:hover {
-          background: #f0a84a;
-          border: 1px solid #f0a84a;
-          color: #17120c;
-          box-shadow: 0 0 25px rgba(240, 168, 74, 0.72);
-        }
-
-        .team-slide-card:hover .team-slide-more:hover {
-          color: #17120c;
-        }
-
-        /* TEAM MODAL */
-        .team-modal-backdrop {
-          position: fixed;
-          inset: 0;
-          z-index: 9998;
-          background: rgba(0,0,0,0.82);
-          backdrop-filter: blur(8px);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 20px;
-        }
-
-        .team-modal {
-          background: #141414;
-          border: 1px solid rgba(255,255,255,0.12);
-          border-radius: 20px;
-          max-width: 540px;
-          width: 100%;
-          padding: 40px;
-          position: relative;
-        }
-
-        .team-modal-close {
-          position: absolute;
-          top: 16px;
-          right: 20px;
-          background: none;
-          border: none;
-          color: rgba(255,255,255,0.5);
-          font-size: 28px;
-          cursor: pointer;
-        }
-
-        .team-modal-close:hover { color: #FF8C00; }
-
-        .team-modal-header {
-          display: flex;
-          align-items: center;
-          gap: 20px;
-          margin-bottom: 28px;
-        }
-
-        .team-modal-img {
-          width: 84px;
-          height: 84px;
-          border-radius: 50%;
-          object-fit: cover;
-          border: 2px solid rgba(255,140,0,0.4);
-        }
-
-        .team-modal-name {
-          font-size: 22px;
-          font-weight: 600;
-          color: #fff;
-          margin-bottom: 4px;
-        }
-
-        .team-modal-role {
-          font-size: 12px;
-          letter-spacing: 2px;
-          text-transform: uppercase;
-          color: #FF8C00;
-        }
-
-        .team-modal-subtitle {
-          font-size: 12px;
-          letter-spacing: 2px;
-          text-transform: uppercase;
-          color: rgba(255,255,255,0.5);
-          margin-bottom: 16px;
-        }
-
-        .team-modal-list {
-          list-style: none;
-          padding: 0;
-          display: flex;
-          flex-direction: column;
-          gap: 12px;
-        }
-
-        .team-modal-list li {
-          font-size: 14.5px;
-          font-weight: 300;
-          color: rgba(255,255,255,0.72);
-          line-height: 1.6;
-          padding-left: 20px;
-          position: relative;
-        }
-
-        .team-modal-list li::before {
-          content: '';
-          position: absolute;
-          left: 0;
-          top: 9px;
-          width: 6px;
-          height: 6px;
-          border-radius: 50%;
-          background: #FF8C00;
+          margin-bottom: 0;
         }
 
         /* FULLSCREEN */
@@ -4680,22 +4395,6 @@ export default function App() {
             line-height: 1.8;
           }
 
-          .about-team-photo-header {
-            gap: 8px;
-            font-size: 8px;
-            letter-spacing: 0.08em;
-          }
-
-          .about-team-placeholder span {
-            font-size: 15px;
-            letter-spacing: 0.2em;
-          }
-
-          .about-team-placeholder small {
-            font-size: 8px;
-            letter-spacing: 0.12em;
-          }
-
           .marquee-section {
             gap: 12px;
             padding: 20px 0;
@@ -4908,33 +4607,6 @@ export default function App() {
 
           .team-slide-name {
             font-size: 19px;
-            margin-bottom: 10px;
-          }
-
-          .team-slide-highlights {
-            gap: 6px;
-            margin-bottom: 14px;
-          }
-
-          .team-slide-highlights li {
-            font-size: 12px;
-          }
-
-          .team-slide-more {
-            min-height: 40px;
-            display: inline-flex;
-            align-items: center;
-          }
-
-          .team-modal-backdrop {
-            padding: max(12px, env(safe-area-inset-top)) 12px max(12px, env(safe-area-inset-bottom));
-          }
-
-          .team-modal {
-            max-height: 90svh;
-            overflow-y: auto;
-            padding: 28px 22px;
-            border-radius: 16px;
           }
 
           .contact-heading,
@@ -5186,22 +4858,6 @@ export default function App() {
 
           .team-slide-name {
             font-size: 17px;
-            margin-bottom: 6px;
-          }
-
-          .team-slide-highlights {
-            gap: 4px;
-            margin-bottom: 8px;
-          }
-
-          .team-slide-highlights li {
-            font-size: 10px;
-            line-height: 1.3;
-          }
-
-          .team-slide-more {
-            min-height: 34px;
-            font-size: 9px;
           }
         }
 
@@ -5481,7 +5137,6 @@ export default function App() {
         .footer-col a,
         .footer-col h4,
         .team-slide-role,
-        .team-slide-highlights li,
         .form-group label {
           color: #b5b5b5;
         }
